@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:E-commerce": "node dist/E-commerce/server/server.mjs"
+    "serve:ssr:E-commerce": "node dist/E-commerce/server/server.mjs",
+     "vercel-build": "npm install --legacy-peer-deps && ng build --configuration production"
   },
   "prettier": {
     "overrides": [
