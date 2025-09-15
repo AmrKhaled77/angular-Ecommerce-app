@@ -1,3 +1,17 @@
 {
-  "buildCommand": "npm install --legacy-peer-deps && npm run build"
+  "version": 2,
+  "builds": [
+    {
+      "src": "angular.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist/E-commerce/browser" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "buildCommand": "npm run vercel-build"
 }
