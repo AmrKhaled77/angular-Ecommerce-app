@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-ui-cart-item',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './ui-cart-item.html',
   styleUrl: './ui-cart-item.scss'
   
