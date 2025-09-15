@@ -1,12 +1,26 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { FlowbiteService } from './core/services/Flowbite/flowbite';
+import { initFlowbite } from 'flowbite';
+import { NavBar } from "./shared/componants/navbarComponant/nav-bar/nav-bar";
+import { Fotter } from "./shared/componants/fotterComponant/fotter/fotter";
+import { Register } from "./Features/auth/register/register/register";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavBar, Fotter, Register],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
   protected title = 'E-commerce';
+
+
+  constructor(private flowbiteService: FlowbiteService) {}
+
+  ngOnInit(): void {
+    this.flowbiteService.loadFlowbite((flowbite) => {
+      initFlowbite();
+    });
+  }
 }
