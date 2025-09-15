@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 
 import { AbstractFormGroupDirective, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Auth } from '../../../../core/services/auth/auth';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,6 +13,18 @@ import { AbstractFormGroupDirective, FormControl, FormGroup, ReactiveFormsModule
 })
 export class Register {
 
+
+  constructor(private auth:Auth){
+
+  }
+private router:Router =inject(Router);
+  
+
+  
+  isLoding=signal<boolean>(false);
+
+
+  registerErrorMassge=signal<string>('');
 
 
 registerForm: FormGroup = new FormGroup(
@@ -52,13 +66,36 @@ registerForm: FormGroup = new FormGroup(
 
 
 
+
   registerClick(){
 
-    console.log(this.registerForm)
+    this.isLoding.set(true);
+
+    if(this.registerForm.valid){
+
+ this.auth.register(this.registerForm.value).subscribe(
+  {
+    next:(res)=>{
+
+this.isLoding.set(false);
+
+this.router.navigate(['/login'])
+    },
 
 
-    console.log("alooooo",this.registerForm.invalid)
-    console.log("alooooo",this.registerForm.errors?.['passwordNotMatch'])
+    error:(err)=>{
+
+      this.isLoding.set(false);
+      console.log(err)
+this.registerErrorMassge.set(err.error.message);
+
+    },
+  }
+ )
+    }
+
+
+   
   }
 
 

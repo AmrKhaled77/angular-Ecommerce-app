@@ -1,0 +1,57 @@
+<section class="flex justify-center items-center min-h-screen bg-gray-50">
+  <div
+    class="w-full max-w-md bg-white rounded-2xl shadow-md p-8 border border-gray-200"
+  >
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+      Verify Code
+    </h2>
+    <p class="text-sm text-gray-500 text-center mb-8">
+      Enter the 6-digit code sent to your email to continue
+    </p>
+
+    <form [formGroup]="verifyForm" (ngSubmit)="verifyCode()" class="space-y-5">
+      <!-- Code Input -->
+      <div class="item">
+        <input
+          formControlName="code"
+          type="text"
+          maxlength="6"
+          placeholder="Enter verification code"
+          [class]="{
+            'border-red-500': verifyForm.get('code')?.invalid && verifyForm.get('code')?.touched,
+            'border-green-500': verifyForm.get('code')?.valid,
+            'border': true,
+            'p-3': true,
+            'rounded-lg': true,
+            'w-full': true,
+            'focus:outline-none': true,
+            'focus:ring-0': true
+          }"
+        />
+
+        <!-- Validation -->
+        @if (verifyForm.get('code')?.invalid && verifyForm.get('code')?.touched) {
+          @if (verifyForm.get('code')?.errors?.['required']) {
+            <p class="mt-2 text-sm text-red-600">Code is required</p>
+          }
+          @if (verifyForm.get('code')?.errors?.['minlength']) {
+            <p class="mt-2 text-sm text-red-600">Code must be 6 digits</p>
+          }
+        }
+      </div>
+
+      <!-- Submit -->
+      <button
+        [disabled]="verifyForm.invalid || isLoading"
+        type="submit"
+        class="w-full py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 
+               disabled:bg-green-300 disabled:cursor-not-allowed"
+      >
+        Verify
+        @if (isLoading) {
+          <i class="fa-solid fa-spinner fa-spin ml-2"></i>
+        }
+      </button>
+    </form>
+  </div>
+</section>

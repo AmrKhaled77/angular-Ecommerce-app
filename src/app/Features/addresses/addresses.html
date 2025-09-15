@@ -1,0 +1,201 @@
+<div class="p-6 max-w-3xl mx-auto bg-white shadow-lg rounded-2xl">
+  <h2 class="text-2xl font-bold mb-6">My Addresses</h2>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <p class="text-gray-500">Loading addresses...</p>
+  }
+
+  <!-- List of Addresses -->
+  @if (!isLoading() && addresses().length > 0) {
+    <div class="space-y-4 mb-6">
+      @for (address of addresses(); track address._id) {
+<div
+  (click)="selectAddress(address._id)"
+  class="relative p-6 border rounded-2xl cursor-pointer transition-all bg-white hover:shadow-lg duration-300"
+  [class.border-green-600]="selectedAddressId() === address._id"
+  [class.border-gray-200]="selectedAddressId() !== address._id"
+>
+  <!-- Selected Checkmark -->
+  @if (selectedAddressId() === address._id) {
+    <span class="absolute top-4 right-4 text-green-600">
+      <i class="fa-solid fa-circle-check text-xl"></i>
+    </span>
+  }
+
+  <!-- Card Content -->
+  <div class="space-y-3 pr-12">
+    <!-- Header -->
+    <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+      <i class="fa-solid fa-location-dot text-green-600"></i>
+      {{ address.name }}
+    </h3>
+
+    <!-- Details -->
+    <div class="text-sm text-gray-700 space-y-1">
+      <p class="flex items-center gap-2">
+        <i class="fa-solid fa-map-marker-alt text-gray-400"></i>
+        {{ address.details }}
+      </p>
+      <p class="flex items-center gap-2">
+        <i class="fa-solid fa-phone text-gray-400"></i>
+        {{ address.phone }}
+      </p>
+      <p class="flex items-center gap-2">
+        <i class="fa-solid fa-city text-gray-400"></i>
+        {{ address.city }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Delete Button (Bottom Right, Minimal FAB) -->
+  <button
+    type="button"
+    (click)="removeAddress(address._id, $event)"
+    class="absolute bottom-4 right-4 flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 text-gray-500 hover:bg-red-600 hover:text-white shadow-md transition-all duration-300"
+
+  >
+    <i class="fa-solid fa-trash text-sm cursor-pointers"></i>
+  </button>
+</div>
+
+
+
+}
+
+    </div>
+  }
+
+  <!-- No Addresses -->
+  @if (!isLoading() && addresses().length === 0) {
+    <div class="text-gray-500 mb-6">
+      No addresses found. Please add one.
+    </div>
+  }
+
+  <!-- Toggle Add Address Form -->
+  <div class="mt-6">
+    <button
+      type="button"
+      (click)="showForm.set(!showForm())"
+      class="min-w-50 cursor-pointer px-4 py-2 rounded-lg transition-all duration-400 transform hover:scale-105"
+      [class.bg-blue-600]="!showForm()"
+      [class.bg-red-600]="showForm()"
+      [class.hover\:bg-blue-700]="!showForm()"
+      [class.hover\:bg-red-700]="showForm()"
+      [class.text-white]="true"
+    >
+      <span class="inline-flex items-center gap-2 transition-all duration-300">
+        <i
+          class="fa-solid"
+          [ngClass]="showForm() ? 'fa-circle-xmark' : 'fa-circle-plus'"
+        ></i>
+        {{ showForm() ? 'Cancel' : 'Add New Address' }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Collapsible Add Address Form -->
+  <div
+    class="overflow-hidden transition-all duration-500 ease-in-out"
+    [style.maxHeight]="showForm() ? '1000px' : '0'"
+  >
+    <form
+      [formGroup]="addressForm"
+      (ngSubmit)="addNewAddress()"
+      class="space-y-4 mt-6 bg-gray-50 p-4 rounded-xl border"
+    >
+      <h3 class="text-lg font-semibold">Add New Address</h3>
+
+      <input
+        type="text"
+        formControlName="name"
+        placeholder="Address Name (e.g. Home, Work)"
+        class="w-full p-2 border rounded-lg"
+      />
+      @if (addressForm.get('name')?.invalid && addressForm.get('name')?.touched) {
+        <div class="text-red-500 text-sm">Name is required</div>
+      }
+
+      <input
+        type="text"
+        formControlName="details"
+        placeholder="Address Details"
+        class="w-full p-2 border rounded-lg"
+      />
+      @if (addressForm.get('details')?.invalid && addressForm.get('details')?.touched) {
+        <div class="text-red-500 text-sm">Details are required</div>
+      }
+
+      <input
+        type="text"
+        formControlName="phone"
+        placeholder="Phone Number"
+        class="w-full p-2 border rounded-lg"
+      />
+      @if (addressForm.get('phone')?.invalid && addressForm.get('phone')?.touched) {
+        <div class="text-red-500 text-sm">Must be a valid phone number (11 digits)</div>
+      }
+
+      <input
+        type="text"
+        formControlName="city"
+        placeholder="City"
+        class="w-full p-2 border rounded-lg"
+      />
+      @if (addressForm.get('city')?.invalid && addressForm.get('city')?.touched) {
+        <div class="text-red-500 text-sm">City is required</div>
+      }
+
+      <button
+        type="submit"
+        [disabled]="isAdding() || addressForm.invalid"
+        class="cursor-pointer px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:bg-gray-400"
+      >
+        {{ isAdding() ? 'Saving...' : '✅ Save Address' }}
+      </button>
+    </form>
+  </div>
+
+   
+    <h3 class="mt-10 text-lg font-semibold mb-3">2️⃣ Select Payment Method</h3>
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <!-- Cash on Delivery -->
+      <div
+        (click)="selectPayment('cash')"
+        class="p-4 border rounded-xl cursor-pointer text-center transition-all duration-300 hover:shadow-md"
+        [class.border-green-600]="paymentMethod() === 'cash'"
+        [class.border-gray-200]="paymentMethod() !== 'cash'"
+      >
+        <i class="fa-solid fa-money-bill-wave text-2xl text-green-600 mb-2"></i>
+        <p class="font-medium">Cash on Delivery</p>
+      </div>
+
+      <!-- Visa -->
+      <div
+        (click)="selectPayment('visa')"
+        class="p-4 border rounded-xl cursor-pointer text-center transition-all duration-300 hover:shadow-md"
+        [class.border-green-600]="paymentMethod() === 'visa'"
+        [class.border-gray-200]="paymentMethod() !== 'visa'"
+      >
+        <i class="fa-brands fa-cc-visa text-3xl text-blue-600 mb-2"></i>
+        <p class="font-medium">Visa / Credit Card</p>
+      </div>
+    </div>
+  
+
+  <!-- Step 3: Confirm Order -->
+  @if (selectedAddressId() && paymentMethod()) {
+    <button
+      class="cursor-pointer w-full px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+      (click)="confirmOrder()"
+    >
+       Confirm Order
+
+     @if (isMakeOrderLoading()) {
+      <i class="fa-solid fa-spinner fa-spin"></i>
+     }
+    </button>}
+  <!-- Confirm Selection -->
+  
+</div>

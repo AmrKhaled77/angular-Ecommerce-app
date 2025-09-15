@@ -1,1 +1,158 @@
-<p>products works!</p>
+<section class="w-11/12 mx-auto my-12">
+  <h2
+    class="text-4xl font-extrabold mb-10 text-gray-900 text-center animate-fade-in-up"
+  >
+    Products
+  </h2>
+
+  
+<div
+  class="max-w-2xl mx-auto mb-12 bg-white border border-gray-200 rounded-2xl shadow-lg"
+>
+  <!-- Header -->
+  <div
+    class="flex items-center justify-between p-6 cursor-pointer select-none"
+    (click)="isFilterOpen = !isFilterOpen"
+  >
+    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+      <i class="fa-solid fa-filter text-green-600"></i>
+      Filter by Price
+    </h3>
+    <i
+      class="fa-solid"
+      [class.fa-chevron-down]="!isFilterOpen"
+      [class.fa-chevron-up]="isFilterOpen"
+    ></i>
+  </div>
+
+  <!-- Collapsible Content -->
+  <div
+    class="overflow-hidden transition-all duration-1000 ease-in-out"
+    [class.max-h-0]="!isFilterOpen"
+    [class.max-h-[1000px]]="isFilterOpen"
+  >
+    <div class="p-6 border-t border-gray-200">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Min Price -->
+        <div>
+          <label class="text-sm font-semibold text-gray-600 mb-1 block">
+            Min Price
+          </label>
+          <input
+            type="number"
+            [(ngModel)]="minPrice"
+            placeholder="e.g. 100"
+            class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+          />
+
+          <!-- Min Slider -->
+          <input
+            type="range"
+            min="0"
+            max="5000"
+            step="50"
+            [(ngModel)]="minPrice"
+            class="w-full accent-green-600 cursor-pointer mt-3"
+          />
+          <p class="text-sm text-gray-500 mt-1">
+            Min: <span class="font-semibold text-gray-800">{{ minPrice }}</span>
+            EGP
+          </p>
+        </div>
+
+        <!-- Max Price -->
+        <div>
+          <label class="text-sm font-semibold text-gray-600 mb-1 block">
+            Max Price
+          </label>
+          <input
+            type="number"
+            [(ngModel)]="maxPrice"
+            placeholder="e.g. 1000"
+            class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+          />
+
+          <!-- Max Slider -->
+          <input
+            type="range"
+            min="0"
+            max="5000"
+            step="50"
+            [(ngModel)]="maxPrice"
+            class="w-full accent-green-600 cursor-pointer mt-3"
+          />
+          <p class="text-sm text-gray-500 mt-1">
+            Max: <span class="font-semibold text-gray-800">{{ maxPrice }}</span>
+            EGP
+          </p>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-4 mt-8">
+        <button
+          class="px-6 py-2 rounded-lg bg-green-600 text-white font-medium shadow hover:bg-green-700 active:scale-95 transition"
+          (click)="applyFilter()"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+    @if (isLoading()) {
+      @for (_ of [1,2,3,4,5,6,7,8,9,10]; track $index) {
+        <div
+          class="relative bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden p-6 animate-pulse"
+        >
+          <div class="h-56 w-full bg-gray-200 rounded-lg mb-4"></div>
+          <div class="space-y-3">
+            <div class="h-3 w-20 bg-gray-200 rounded"></div>
+            <div class="h-4 w-32 bg-gray-200 rounded"></div>
+            <div class="flex items-center justify-between mt-6">
+              <div class="h-5 w-24 bg-gray-200 rounded"></div>
+              <div class="flex items-center space-x-2">
+                <div class="h-5 w-5 bg-gray-200 rounded-full"></div>
+                <div class="h-3 w-8 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    } @else {
+      @for (product of products(); track product._id) {
+        <app-product-item
+          [style.animation-delay]="`calc(0.03s * ${$index})`"
+          class="animate-fade-in-up"
+          [cardItem]="product"
+        ></app-product-item>
+      }
+    }
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex items-center justify-center gap-4 mt-8">
+    <button
+      class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+      (click)="prevPage()"
+      [disabled]="page() === 1"
+    >
+      Previous
+    </button>
+    <span>Page {{ page() }} / {{ totalPages() }}</span>
+    <button
+      class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+      (click)="nextPage()"
+      [disabled]="page() === totalPages()"
+    >
+      Next
+    </button>
+  </div>
+</section>

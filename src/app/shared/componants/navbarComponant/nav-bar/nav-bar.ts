@@ -1,6 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, Inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Auth } from '../../../../core/services/auth/auth';
+import { log } from 'console';
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,9 +10,18 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './nav-bar.html',
   styleUrl: './nav-bar.scss'
 })
-export class NavBar {
+export class NavBar implements OnInit {
 
    constructor(@Inject(PLATFORM_ID) private platformId: any) {}
+
+
+private router:Router =inject(Router);
+ isOpen = false; //
+
+   auth :Auth=inject(Auth);
+
+
+
 
   loadFlowbite(callback: (flowbite: any) => void) {
     if (isPlatformBrowser(this.platformId)) {
@@ -18,6 +29,50 @@ export class NavBar {
         callback(flowbite);
       });
     }
+
+   
+
+  
+  }
+
+   isLogin=signal<boolean>(false);
+
+
+  ngOnInit(): void {
+
+    
+    
+    this.CheckLogin();
+  }
+  
+  
+
+
+ 
+
+
+   
+CheckLogin() {
+  this.auth.userData.subscribe(user => {
+    console.log('User from BehaviorSubject:', user);
+    this.isLogin.set(!!user); 
+  });
+}
+
+
+
+
+
+
+
+
+  logOut(){
+    localStorage.removeItem('userdata');
+    this.auth.userData.next(null)
+
+     
+    this.router.navigate(['/login'])
+
   }
 
 }

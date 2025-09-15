@@ -1,1 +1,68 @@
-<p>categories works!</p>
+<section class="my-20 py-12 px-4 sm:px-16">
+  <!-- Section Title -->
+  <h1 class="text-5xl font-extrabold mb-12 text-gray-900 text-center animate-fade-in-up">
+    Categories
+  </h1>
+
+  <!-- Categories Grid -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+
+    <!-- Check if categories exist -->
+    @if(CategorysList() && CategorysList()!.length > 0){
+      @for (category of CategorysList()!; track $index) {
+
+        <div
+         [routerLink]="['/categoriesDetails', category._id]"
+          class="relative flex flex-col items-center justify-center p-4 bg-white rounded-3xl
+                 shadow-md border border-transparent transition duration-300 
+                 hover:scale-105 hover:shadow-2xl hover:border-gray-200 cursor-pointer animate-fade-in-up"
+          [style.animation-delay]="`calc(0.03s * ${$index})`"
+          title="{{ category.name }}"
+        >
+          <!-- Category Image -->
+          <img
+            [src]="category.image"
+            [alt]="category.name"
+            class="h-28 w-auto object-contain rounded-2xl mb-3 transition-transform duration-500 hover:scale-110"
+          />
+
+          <!-- Category Name -->
+          <span class="text-gray-900 font-semibold text-center text-sm sm:text-base">
+            {{ category.name }}
+          </span>
+
+          <!-- Hover Overlay for depth effect -->
+          <div
+            class="absolute inset-0 rounded-3xl bg-gradient-to-t from-black/0 to-black/10 opacity-0 
+                   hover:opacity-100 transition duration-300"
+          ></div>
+
+          <!-- Optional arrow icon (like Amazon) -->
+          <div
+            class="absolute bottom-3 right-3 opacity-0 hover:opacity-100 transition duration-300"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+
+      }
+    }
+    @else{
+      <!-- Skeleton Loading -->
+      @for (_ of [1,2,3,4,5,6,7,8,9,10]; track $index) {
+        <div
+          class="flex flex-col items-center justify-center p-4 bg-white rounded-3xl shadow-md animate-pulse"
+        >
+          <!-- Skeleton Image -->
+          <div class="h-28 w-28 bg-gray-200 rounded-2xl mb-3"></div>
+
+          <!-- Skeleton Text -->
+          <div class="h-4 w-20 bg-gray-200 rounded"></div>
+        </div>
+      }
+    }
+
+  </div>
+</section>
