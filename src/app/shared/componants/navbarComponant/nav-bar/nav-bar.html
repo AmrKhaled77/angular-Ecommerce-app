@@ -6,7 +6,7 @@
       <img src="/images-20250822T112400Z-1-001/images/freshcart-logo.svg" class="h-8" alt="Logo" />
     </a>
 
-    <!-- Right Side (Login / Logout) -->
+    <!-- Right Side (Desktop only) -->
     <div class="flex items-center md:order-2">
       <ul class="hidden md:flex flex-row items-center space-x-6">
         @if (isLogin()) {
@@ -35,10 +35,39 @@
       </button>
     </div>
 
-    <!-- Main Nav Links -->
-    <div [class.hidden]="!isOpen" class="w-full md:flex md:w-auto md:order-1">
+    <!-- Mobile Menu -->
+    <div [class.hidden]="!isOpen" class="w-full md:hidden mt-4">
+      <ul class="flex flex-col space-y-4 font-medium">
+        <!-- Main nav -->
+        @if (isLogin()) {
+          <li><a routerLink="home" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Home</a></li>
+          <li><a routerLink="cart" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Cart</a></li>
+          <li><a routerLink="wishList" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Wishlist</a></li>
+          <li><a routerLink="products" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Products</a></li>
+          <li><a routerLink="categories" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Categories</a></li>
+          <li><a routerLink="brands" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Brands</a></li>
+        }
+
+        <!-- Auth Links (mobile only) -->
+        @if (isLogin()) {
+          <li>
+            <a (click)="logOut()" class="block py-2 text-gray-500 hover:text-green-700 cursor-pointer">Sign out</a>
+          </li>
+        } @else {
+          <li>
+            <a routerLink="login" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Login</a>
+          </li>
+          <li>
+            <a routerLink="register" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Register</a>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- Desktop Main Nav -->
+    <div class="hidden md:flex md:w-auto md:order-1">
       @if (isLogin()) {
-        <ul class="flex flex-col mt-4 md:flex-row md:mt-0 md:space-x-8 font-medium">
+        <ul class="flex flex-row md:space-x-8 font-medium">
           <li><a routerLink="home" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Home</a></li>
           <li><a routerLink="cart" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Cart</a></li>
           <li><a routerLink="wishList" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Wishlist</a></li>
