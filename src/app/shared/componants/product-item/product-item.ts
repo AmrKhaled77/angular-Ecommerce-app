@@ -21,6 +21,8 @@ export class ProductItem implements OnInit {
 
 
 
+
+
    constructor(private toastr: ToastrService) {
    
    }
@@ -64,6 +66,8 @@ this.wishListServices.WishListIDS.subscribe({
       this.isLoading.set(true);
  this.cartServices.addToCart(this.cardItem._id).subscribe({
   next:(res)=>{
+
+    this.cartServices.cartCount.next(res.numOfCartItems)
 
 console.log(res)
     this.toastr.success(res.message);
@@ -113,6 +117,7 @@ onWishlistClick(productId: string) {
     next:(res)=>{
 
 
+
  this.wishListServices.loadWishList();
     
 
@@ -138,6 +143,7 @@ onWishlistClick(productId: string) {
 
       
  
+
 
 
   

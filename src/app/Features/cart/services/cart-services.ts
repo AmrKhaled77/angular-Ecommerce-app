@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
@@ -11,18 +11,28 @@ export class CartServices {
 
   private httpClient:HttpClient=inject(HttpClient)
 
-   
 
-  Myheaders:object={
-    headers:{
 
-          token:localStorage.getItem('userdata')
+ cartCount = new BehaviorSubject<number>(0);
 
+  
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
+  
+  get Myheaders(): object {
+    let token = '';
+    if (isPlatformBrowser(this.platformId)) {
+      token = localStorage.getItem('userdata') || '';
     }
-    
-
+    return {
+      headers: { token }
+    };
   }
 
+   
+
+  
+
 
 
   
@@ -31,7 +41,7 @@ export class CartServices {
   
 
 
- constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
 
  ngOnInit() {
     
@@ -40,11 +50,6 @@ export class CartServices {
   addToCart(productId: string): Observable<any> {
 
   
-
-  
-
-   
-
     return this.httpClient.post(
       `${environment.baseURL}cart`,
       { productId: productId },

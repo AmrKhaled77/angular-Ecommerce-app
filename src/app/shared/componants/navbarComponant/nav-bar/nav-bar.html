@@ -1,24 +1,75 @@
 <nav class="bg-gray-100 shadow">
   <div class="max-w-screen-xxl flex flex-wrap items-center justify-between mx-auto py-3 px-6">
-    
+
     <!-- Logo -->
     <a routerLink="/" class="flex items-center space-x-3 rtl:space-x-reverse">
       <img src="/images-20250822T112400Z-1-001/images/freshcart-logo.svg" class="h-8" alt="Logo" />
     </a>
 
-    <!-- Right Side (Desktop only) -->
-    <div class="flex items-center md:order-2">
-      <ul class="hidden md:flex flex-row items-center space-x-6">
+    <!-- Right Side -->
+    <div class="flex items-center md:order-2 space-x-6">
+
+      @if (isLogin()) {
+        <!-- Cart Icon -->
+        <div class="relative">
+          <a
+          routerLinkActive="text-green-700 font-bold"
+
+
+          routerLink="cart" class="text-gray-600 hover:text-green-700 transition relative">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor"
+                 class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8H19M7 13l1.6-8m0 0H21"/>
+            </svg>
+            @if (NavCartCount() > 0) {
+              <span 
+                class="absolute -top-2 -right-2 bg-green-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                {{ NavCartCount() }}
+              </span>
+            }
+          </a>
+        </div>
+
+        <!-- Wishlist Icon -->
+        <div class="relative">
+          <a 
+          routerLinkActive="text-green-700 font-bold"
+
+          routerLink="wishList" class="text-gray-600 hover:text-green-700 transition relative">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor"
+                 class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 
+                       4.5 0 116.364 6.364L12 21.364l-7.682-7.682a4.5 
+                       4.5 0 010-6.364z"/>
+            </svg>
+            @if (NavWishListCount() > 0) {
+              <span 
+                class="absolute -top-2 -right-2 bg-green-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                {{ NavWishListCount() }}
+              </span>
+            }
+          </a>
+        </div>
+      }
+
+      <!-- Desktop Auth Links (beside icons, hidden on mobile) -->
+      <ul class="hidden md:flex items-center space-x-4">
         @if (isLogin()) {
           <li>
             <a (click)="logOut()" class="text-gray-500 hover:text-green-700 cursor-pointer transition">Sign out</a>
           </li>
         } @else {
           <li>
-            <a routerLink="login" routerLinkActive="text-green-700" class="text-gray-500 hover:text-green-700 transition">Login</a>
+            <a routerLinkActive="text-green-700 font-bold"
+ routerLink="login" class="text-gray-500 hover:text-green-700 transition">Login</a>
           </li>
           <li>
-            <a routerLink="register" routerLinkActive="text-green-700" class="text-gray-500 hover:text-green-700 transition">Register</a>
+            <a routerLinkActive="text-green-700 font-bold"
+ routerLink="register" class="text-gray-500 hover:text-green-700 transition">Register</a>
           </li>
         }
       </ul>
@@ -26,40 +77,37 @@
       <!-- Mobile menu button -->
       <button 
         (click)="isOpen = !isOpen"
-        class="md:hidden inline-flex items-center p-2 w-10 h-10 justify-center text-gray-600 rounded-lg hover:bg-gray-200 focus:outline-none"
-      >
+        class="md:hidden inline-flex items-center p-2 w-10 h-10 justify-center text-gray-600 rounded-lg hover:bg-gray-200 focus:outline-none">
         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M1 1h15M1 7h15M1 13h15" />
+                d="M1 1h15M1 7h15M1 13h15" />
         </svg>
       </button>
+
     </div>
 
     <!-- Mobile Menu -->
     <div [class.hidden]="!isOpen" class="w-full md:hidden mt-4">
       <ul class="flex flex-col space-y-4 font-medium">
-        <!-- Main nav -->
         @if (isLogin()) {
-          <li><a routerLink="home" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Home</a></li>
-          <li><a routerLink="cart" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Cart</a></li>
-          <li><a routerLink="wishList" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Wishlist</a></li>
-          <li><a routerLink="products" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Products</a></li>
-          <li><a routerLink="categories" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Categories</a></li>
-          <li><a routerLink="brands" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Brands</a></li>
-        }
+          <li><a routerLinkActive="text-green-700 font-bold"
 
-        <!-- Auth Links (mobile only) -->
-        @if (isLogin()) {
-          <li>
-            <a (click)="logOut()" class="block py-2 text-gray-500 hover:text-green-700 cursor-pointer">Sign out</a>
-          </li>
+            routerLink="home" class="block py-2 text-gray-500 hover:text-green-700">Home</a></li>
+          <li><a routerLinkActive="text-green-700 font-bold"
+
+             routerLink="products" class="block py-2 text-gray-500 hover:text-green-700">Products</a></li>
+          <li><a 
+            routerLinkActive="text-green-700 font-bold"
+
+            routerLink="categories" class="block py-2 text-gray-500 hover:text-green-700">Categories</a></li>
+          <li><a 
+            routerLinkActive="text-green-700 font-bold"
+
+            routerLink="brands" class="block py-2 text-gray-500 hover:text-green-700">Brands</a></li>
+          <li><a (click)="logOut()" class="block py-2 text-gray-500 hover:text-green-700 cursor-pointer">Sign out</a></li>
         } @else {
-          <li>
-            <a routerLink="login" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Login</a>
-          </li>
-          <li>
-            <a routerLink="register" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Register</a>
-          </li>
+          <li><a routerLink="login" class="block py-2 text-gray-500 hover:text-green-700">Login</a></li>
+          <li><a routerLink="register" class="block py-2 text-gray-500 hover:text-green-700">Register</a></li>
         }
       </ul>
     </div>
@@ -68,14 +116,17 @@
     <div class="hidden md:flex md:w-auto md:order-1">
       @if (isLogin()) {
         <ul class="flex flex-row md:space-x-8 font-medium">
-          <li><a routerLink="home" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Home</a></li>
-          <li><a routerLink="cart" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Cart</a></li>
-          <li><a routerLink="wishList" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Wishlist</a></li>
-          <li><a routerLink="products" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Products</a></li>
-          <li><a routerLink="categories" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Categories</a></li>
-          <li><a routerLink="brands" routerLinkActive="text-green-700" class="block py-2 text-gray-500 hover:text-green-700">Brands</a></li>
+          <li><a routerLinkActive="text-green-700 font-bold"
+ routerLink="home" class="block py-2 text-gray-500 hover:text-green-700">Home</a></li>
+          <li><a routerLinkActive="text-green-700 font-bold"
+ routerLink="products" class="block py-2 text-gray-500 hover:text-green-700">Products</a></li>
+          <li><a routerLinkActive="text-green-700 font-bold"
+ routerLink="categories" class="block py-2 text-gray-500 hover:text-green-700">Categories</a></li>
+          <li><a routerLinkActive="text-green-700 font-bold"
+ routerLink="brands" class="block py-2 text-gray-500 hover:text-green-700">Brands</a></li>
         </ul>
       }
     </div>
+
   </div>
 </nav>

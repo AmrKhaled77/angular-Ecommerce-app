@@ -30,7 +30,8 @@ export class WishListServices {
     };
   }
 
-  
+   WishListCount = new BehaviorSubject<number>(0);
+
   WishListIDS = new BehaviorSubject<any[]>([]);
 
 
@@ -57,6 +58,7 @@ export class WishListServices {
     this.WishListIDS.next(res.data)
 
 
+this.WishListCount.next(res.count)
 
 
       },
