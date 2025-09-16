@@ -69,6 +69,7 @@ OnRemoveClick(productId: string) {
 
     if(count===0){
       this.OnRemoveClick(productId)
+      return
     }
 
     this.UpdateCount.set(count)
