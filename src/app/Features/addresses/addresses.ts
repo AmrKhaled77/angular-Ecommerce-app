@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MakeOrder } from '../../core/services/makeOrder/make-order';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CartServices } from '../cart/services/cart-services';
 
 @Component({
   selector: 'app-addresses',
@@ -20,6 +21,8 @@ export class Addresses implements OnInit {
     private route = inject(ActivatedRoute);
     private router = inject(Router);
       private toastrService=inject(ToastrService)
+      
+        private cartServices = inject(CartServices);
 
   // Signals for state management
   addresses = signal<any[]>([]);
@@ -129,7 +132,18 @@ export class Addresses implements OnInit {
   if (this.paymentMethod() === 'cash') {
     this.isMakeOrderLoading.set(true)
     this.makeOrder.makeCashOrder(this.cartId!, shippingData).subscribe({
+
+
       next: (res) => {
+
+        //update count
+        this.cartServices.getCart().subscribe({
+      next:(res)=>{
+   this.cartServices.cartCount.next(res.numOfCartItems) 
+      }
+    })
+
+
             this.isMakeOrderLoading.set(false)
         console.log('Order placed successfully:', res);
 
@@ -153,6 +167,12 @@ else  if (this.paymentMethod() === 'visa'){
    this.isMakeOrderLoading.set(true)
     this.makeOrder.CheckOutSession(this.cartId!, shippingData).subscribe({
       next: (res) => {
+
+           this.cartServices.getCart().subscribe({
+      next:(res)=>{
+   this.cartServices.cartCount.next(res.numOfCartItems) 
+      }
+    })
             this.isMakeOrderLoading.set(false)
          window.location.href = res.session.url; 
        
