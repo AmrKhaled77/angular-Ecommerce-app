@@ -12,8 +12,6 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class Login {
 
 
-
-
     constructor(private auth:Auth){
 
   }
@@ -21,8 +19,9 @@ private router:Router =inject(Router);
   
 
   
-  isLoding=signal<boolean>(false);
 
+isLoding=signal<boolean>(false);
+showPassword :boolean=false;
 
   registerErrorMassge=signal<string>('');
 
